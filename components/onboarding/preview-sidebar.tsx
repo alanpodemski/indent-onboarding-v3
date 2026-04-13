@@ -28,7 +28,7 @@ const WEEK_SESSIONS: SessionItem[] = [
   { label: "Sudden Drop in API Response...", icon: "incident", iconColor: "text-red-500" },
   { label: "Increased Disk I/O on Cache...", icon: "pr", iconColor: "text-blue-500" },
   { label: "Network Congestion Affecting...", icon: "dot", iconColor: "text-amber-500" },
-  { label: "Task #480 Security Vulnerability...", icon: "dot", iconColor: "text-muted-foreground/40" },
+  { label: "Task #480 Security Vulnerability...", icon: "dot", iconColor: "text-muted-foreground/60" },
 ]
 
 export function PreviewSidebar({
@@ -73,7 +73,7 @@ export function PreviewSidebar({
             </svg>
             New session
           </div>
-          <span className="text-[10px] text-muted-foreground/30 font-mono">&#8984;O</span>
+          <span className="text-[10px] text-muted-foreground/50 font-mono">&#8984;O</span>
         </button>
       </div>
 
@@ -101,7 +101,7 @@ export function PreviewSidebar({
         <div className="mt-3 flex-1 overflow-y-auto scrollbar-none">
           {/* Today */}
           <div className="px-3 mb-1">
-            <span className="text-[10px] font-medium text-muted-foreground/40 uppercase tracking-wider">Today</span>
+            <span className="text-[10px] font-medium text-muted-foreground/60 uppercase tracking-wider">Today</span>
           </div>
           <div className="flex flex-col gap-px px-2 mb-3">
             {TODAY_SESSIONS.map((s, i) => (
@@ -111,7 +111,7 @@ export function PreviewSidebar({
 
           {/* This Week */}
           <div className="px-3 mb-1">
-            <span className="text-[10px] font-medium text-muted-foreground/40 uppercase tracking-wider">This Week</span>
+            <span className="text-[10px] font-medium text-muted-foreground/60 uppercase tracking-wider">This Week</span>
           </div>
           <div className="flex flex-col gap-px px-2">
             {WEEK_SESSIONS.map((s, i) => (
@@ -121,7 +121,7 @@ export function PreviewSidebar({
 
           {/* More */}
           <div className="px-3 mt-1.5 mb-3">
-            <button className="flex items-center gap-1 text-[10px] text-muted-foreground/30 hover:text-foreground/50 transition-colors">
+            <button className="flex items-center gap-1 text-[10px] text-muted-foreground/50 hover:text-foreground/50 transition-colors">
               <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
                 <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

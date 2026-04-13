@@ -20,7 +20,7 @@ export function PreviewGitHub({ workspaceName }: { workspaceName: string }) {
       <div className="flex-1 overflow-hidden p-4">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-[12px] font-semibold text-foreground/60">Repositories</h3>
-          <span className="text-[10px] text-muted-foreground/40">{MOCK_REPOS.length} connected</span>
+          <span className="text-[10px] text-muted-foreground/60">{MOCK_REPOS.length} connected</span>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -41,7 +41,7 @@ export function PreviewGitHub({ workspaceName }: { workspaceName: string }) {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-[11px] font-medium text-foreground/70 truncate">{repo.name}</span>
-                  <span className="rounded-full border border-border/40 px-1.5 py-px text-[9px] text-muted-foreground/40">
+                  <span className="rounded-full border border-border/40 px-1.5 py-px text-[9px] text-muted-foreground/60">
                     {repo.visibility}
                   </span>
                 </div>
@@ -53,7 +53,7 @@ export function PreviewGitHub({ workspaceName }: { workspaceName: string }) {
                   className="size-2 rounded-full"
                   style={{ backgroundColor: repo.color }}
                 />
-                <span className="text-[10px] text-muted-foreground/40">{repo.lang}</span>
+                <span className="text-[10px] text-muted-foreground/60">{repo.lang}</span>
               </div>
             </div>
           ))}

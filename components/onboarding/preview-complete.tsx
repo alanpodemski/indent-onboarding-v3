@@ -32,7 +32,7 @@ export function PreviewComplete({ workspaceName }: { workspaceName: string }) {
               </div>
               <div>
                 <p className="text-[11px] font-semibold text-foreground/70">Sarah Mitchell</p>
-                <p className="text-[10px] text-muted-foreground/40">2 minutes ago</p>
+                <p className="text-[10px] text-muted-foreground/60">2 minutes ago</p>
               </div>
             </div>
             <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[9px] font-medium text-amber-600 dark:text-amber-400">
@@ -43,16 +43,16 @@ export function PreviewComplete({ workspaceName }: { workspaceName: string }) {
           {/* Details */}
           <div className="mt-3 space-y-2">
             <div className="flex items-center gap-2 rounded-lg bg-foreground/[0.02] px-3 py-2">
-              <span className="text-[10px] text-muted-foreground/40">Resource</span>
+              <span className="text-[10px] text-muted-foreground/60">Resource</span>
               <span className="text-[10px] font-medium text-foreground/60">api-gateway</span>
-              <span className="rounded-full border border-border/40 px-1 py-px text-[8px] text-muted-foreground/30">Private</span>
+              <span className="rounded-full border border-border/40 px-1 py-px text-[8px] text-muted-foreground/50">Private</span>
             </div>
             <div className="flex items-center gap-2 rounded-lg bg-foreground/[0.02] px-3 py-2">
-              <span className="text-[10px] text-muted-foreground/40">Access</span>
+              <span className="text-[10px] text-muted-foreground/60">Access</span>
               <span className="text-[10px] font-medium text-foreground/60">Read access · Expires in 4 hours</span>
             </div>
             <div className="rounded-lg bg-foreground/[0.02] px-3 py-2">
-              <span className="text-[10px] text-muted-foreground/40">Reason</span>
+              <span className="text-[10px] text-muted-foreground/60">Reason</span>
               <p className="mt-0.5 text-[10px] text-foreground/60">
                 Need to debug production latency issue in the payment service
               </p>
@@ -95,7 +95,7 @@ export function PreviewComplete({ workspaceName }: { workspaceName: string }) {
               { time: "2:36 PM", event: "Waiting for approval..." },
             ].map((entry, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="text-[9px] font-mono text-muted-foreground/30 shrink-0">{entry.time}</span>
+                <span className="text-[9px] font-mono text-muted-foreground/50 shrink-0">{entry.time}</span>
                 <div className="size-1 rounded-full bg-foreground/10" />
                 <span className="text-[9px] text-foreground/40">{entry.event}</span>
               </div>

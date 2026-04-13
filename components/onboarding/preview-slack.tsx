@@ -62,7 +62,7 @@ export function PreviewSlack({ workspaceName }: { workspaceName: string }) {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-semibold text-foreground/60">Indent Bot</span>
-                <span className="text-[9px] text-muted-foreground/30">2:34 PM</span>
+                <span className="text-[9px] text-muted-foreground/50">2:34 PM</span>
               </div>
               <p className="mt-0.5 text-[10px] leading-relaxed text-foreground/50">
                 Access request: <span className="font-medium text-foreground/70">@sarah</span> needs read access to <span className="font-medium text-foreground/70">api-gateway</span>

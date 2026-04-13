@@ -71,7 +71,7 @@ export function PreviewRepoConfirm({
         {/* Header */}
         <div className="shrink-0 border-b border-border/20 px-6 py-4">
           <h2 className="text-[14px] font-semibold text-foreground/80">Confirm GitHub Repositories</h2>
-          <p className="text-[11px] text-muted-foreground/40 mt-0.5">Confirm these are the repositories you want to connect to</p>
+          <p className="text-[11px] text-muted-foreground/60 mt-0.5">Confirm these are the repositories you want to connect to</p>
         </div>
 
         <div className="flex flex-1 flex-col overflow-y-auto px-6 py-4 scrollbar-none min-h-0">
@@ -90,7 +90,7 @@ export function PreviewRepoConfirm({
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] text-muted-foreground/40">Wrong account?</span>
+              <span className="text-[11px] text-muted-foreground/60">Wrong account?</span>
               <button className="rounded-lg border border-border/40 px-2.5 py-1 text-[11px] font-medium text-foreground/50 hover:bg-foreground/[0.04] transition-colors">
                 Change user
               </button>
@@ -107,7 +107,7 @@ export function PreviewRepoConfirm({
                 </svg>
                 <div>
                   <span className="text-[13px] font-semibold text-foreground/70">Repositories</span>
-                  <span className="ml-2 text-[11px] text-muted-foreground/40">{allRepos.length} repositories connected</span>
+                  <span className="ml-2 text-[11px] text-muted-foreground/60">{allRepos.length} repositories connected</span>
                 </div>
               </div>
               <button className="rounded-lg border border-border/40 px-3 py-1.5 text-[11px] font-medium text-foreground/50 hover:bg-foreground/[0.04] transition-colors">
@@ -118,7 +118,7 @@ export function PreviewRepoConfirm({
             {/* Search */}
             <div className="px-4 pt-3 pb-2">
               <div className="relative">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/30">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50">
                   <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
                   <path d="M11 11L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
@@ -127,7 +127,7 @@ export function PreviewRepoConfirm({
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   placeholder="Search repositories"
-                  className="w-full h-9 rounded-lg border border-border/40 bg-background pl-9 pr-3 text-[13px] text-foreground placeholder:text-muted-foreground/30 outline-none focus:border-foreground/20 transition-colors"
+                  className="w-full h-9 rounded-lg border border-border/40 bg-background pl-9 pr-3 text-[13px] text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-foreground/20 transition-colors"
                 />
               </div>
             </div>
@@ -135,7 +135,7 @@ export function PreviewRepoConfirm({
             {/* Repo list */}
             <div className="flex-1 overflow-y-auto px-2 scrollbar-none">
               {filtered.length === 0 ? (
-                <p className="py-6 text-center text-[12px] text-muted-foreground/30">No repositories found</p>
+                <p className="py-6 text-center text-[12px] text-muted-foreground/50">No repositories found</p>
               ) : (
                 filtered.map((repo, i) => (
                   <div
@@ -147,14 +147,14 @@ export function PreviewRepoConfirm({
                     }}
                   >
                     <span className="text-[13px] text-foreground/60">
-                      <span className="text-muted-foreground/40">{repo.org}</span>
-                      <span className="text-muted-foreground/25 mx-0.5">/</span>
-                      <span className="font-semibold text-foreground/80">{repo.name}</span>
+                      <span className="text-muted-foreground/60">{repo.org}</span>
+                      <span className="text-muted-foreground/40 mx-0.5">/</span>
+                      <span className="font-medium text-foreground/70">{repo.name}</span>
                     </span>
                     <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ${
                       repo.visibility === "Private"
                         ? "bg-foreground/[0.06] text-foreground/50"
-                        : "border border-border/40 text-muted-foreground/40"
+                        : "border border-border/40 text-muted-foreground/60"
                     }`}>
                       {repo.visibility}
                     </span>
@@ -165,7 +165,7 @@ export function PreviewRepoConfirm({
 
             {/* Missing repos */}
             <div className="px-4 py-3 border-t border-border/20">
-              <p className="text-[11px] text-muted-foreground/40">
+              <p className="text-[11px] text-muted-foreground/60">
                 Missing repositories?{" "}
                 <button
                   onClick={handleAddMore}
