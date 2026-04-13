@@ -38,12 +38,12 @@ export interface ChatEngineState {
 
 // ── Animation constants ─────────────────────────────────────────
 export const TIMING = {
-  messageGap: 250,
-  interactionDelay: 150,
+  messageGap: 150,
+  interactionDelay: 100,
   stagger: 50,
   previewTransition: 500,
-  stepPause: 200,
-  typingDuration: 350,
+  stepPause: 120,
+  typingDuration: 200,
 } as const
 
 export const EASING = {
@@ -53,11 +53,11 @@ export const EASING = {
 
 export const AGENT_TEXT_DEFAULTS = {
   charset: "braille" as const,
-  charSpeed: 15,
+  charSpeed: 12,
   stagger: "word" as const,
   direction: "ltr" as const,
-  scrambleCycles: 3,
-  scrambleInterval: 35,
+  scrambleCycles: 2,
+  scrambleInterval: 30,
 }
 
 // ── Step definitions ────────────────────────────────────────────
