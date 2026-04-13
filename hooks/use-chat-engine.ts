@@ -6,7 +6,7 @@ import { useState, useCallback, useRef } from "react"
 export type MessageType = "agent" | "user" | "system"
 export type InteractionType =
   | "choice" | "input" | "oauth-github" | "github-install"
-  | "repo-confirm" | "slack-connect" | "launch"
+  | "repo-confirm" | "slack-connect" | "launch" | "go-to-app"
 export type PreviewState = 0 | 1 | 2 | 3 | 4
 export type Phase = "orientation" | "configuration" | "launch"
 
@@ -224,6 +224,16 @@ const STEPS: StepDef[] = [
     interaction: { type: "launch" },
     onComplete: () => ({
       previewState: 4 as PreviewState,
+    }),
+  },
+
+  // Step 12: Go to app
+  {
+    agentMessages: [
+      "Your workspace is live. Jump in whenever you're ready.",
+    ],
+    interaction: { type: "go-to-app" },
+    onComplete: () => ({
       phase: "launch" as Phase,
     }),
   },
@@ -406,15 +416,9 @@ export function useChatEngine() {
   }, [addMessage, advanceStep])
 
   const handleLaunch = useCallback(() => {
-    const current = stateRef.current
-    const stepDef = STEPS[current.step]
-    const updates = stepDef?.onComplete?.(current) ?? {}
-    updateState(prev => ({
-      ...prev,
-      pendingInteraction: null,
-      ...updates,
-    }))
-  }, [updateState])
+    addMessage("system", "Workspace ready")
+    advanceStep()
+  }, [addMessage, advanceStep])
 
   return {
     ...state,
