@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/bin/zsh",
+      "runtimeArgs": ["-c", "export NVM_DIR=\"$HOME/.nvm\" && source \"$NVM_DIR/nvm.sh\" && npx next dev --turbopack --port $PORT"],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}
