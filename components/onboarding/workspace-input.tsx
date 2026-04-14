@@ -42,12 +42,12 @@ export function WorkspaceInput({
           onKeyDown={e => e.key === "Enter" && handleSubmit()}
           placeholder={placeholder}
           disabled={submitted}
-          className="h-10 w-64 rounded-xl border border-border bg-background px-4 text-[14px] text-foreground placeholder:text-muted-foreground/40 outline-none transition-all duration-200 focus:border-foreground/20 focus:ring-2 focus:ring-foreground/[0.06] disabled:opacity-50"
+          className="h-10 w-64 rounded-lg border border-border bg-background px-3.5 text-[13px] text-foreground placeholder:text-muted-foreground/40 outline-none transition-all duration-200 focus:border-foreground/20 focus:ring-2 focus:ring-foreground/[0.06] disabled:opacity-50"
         />
         <button
           onClick={handleSubmit}
           disabled={!value.trim() || submitted}
-          className="flex h-10 items-center gap-2 rounded-[10px] bg-[linear-gradient(to_bottom,rgb(64,64,64),rgb(38,38,38))] px-4 has-[kbd]:pr-2 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14),inset_0_-1px_0_0_rgba(255,255,255,0.02),0_1px_2px_0_rgba(0,0,0,0.05),0_2px_4px_-1px_rgba(0,0,0,0.05)] transition-all hover:bg-[linear-gradient(to_bottom,rgb(74,74,74),rgb(48,48,48))] active:translate-y-px disabled:opacity-30 disabled:pointer-events-none"
+          className="flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[linear-gradient(to_bottom,rgb(64,64,64),rgb(38,38,38))] px-4 has-[kbd]:pr-2 text-[13px] font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14),inset_0_-1px_0_0_rgba(255,255,255,0.02),0_1px_2px_0_rgba(0,0,0,0.05),0_2px_4px_-1px_rgba(0,0,0,0.05)] transition-all hover:bg-[linear-gradient(to_bottom,rgb(74,74,74),rgb(48,48,48))] active:translate-y-px disabled:opacity-30 disabled:pointer-events-none"
         >
           Continue
           <kbd className="flex size-6 items-center justify-center rounded-md border border-white/15 bg-white/10 text-white/70">

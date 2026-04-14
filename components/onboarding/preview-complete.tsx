@@ -6,7 +6,7 @@ import { EASING } from "@/hooks/use-chat-engine"
 export function PreviewComplete({ workspaceName }: { workspaceName: string }) {
   return (
     <div className="flex h-full">
-      <PreviewSidebar workspaceName={workspaceName} activeNav="oncall" />
+      <PreviewSidebar workspaceName={workspaceName} activeNav="home" />
 
       {/* Main content: sample access request */}
       <div className="flex-1 overflow-hidden p-4">

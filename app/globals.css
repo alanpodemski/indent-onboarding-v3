@@ -241,6 +241,17 @@
   }
 }
 
+@keyframes slackWindowIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.82) translate(4%, 8%);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(0.88) translate(4%, 5%);
+  }
+}
+
 /* Hide scrollbar but keep scrollable */
 .scrollbar-none {
   -ms-overflow-style: none;

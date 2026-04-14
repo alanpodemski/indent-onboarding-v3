@@ -73,8 +73,8 @@ const STEPS: StepDef[] = [
   // Step 0: Greeting
   {
     agentMessages: [
-      "Hey there.",
-      "I'm Indent.",
+      "Welcome to Indent.",
+      "I'll walk you through setting up your workspace and connecting your tools.",
     ],
   },
 
@@ -89,6 +89,8 @@ const STEPS: StepDef[] = [
         "They open a ticket and wait",
         "It's chaos, honestly",
       ],
+      allowCustomInput: true,
+      customInputPlaceholder: "Tell us what happens...",
     }},
   },
 
@@ -160,10 +162,137 @@ const STEPS: StepDef[] = [
     }),
   },
 
-  // Step 7: Connect GitHub account
+  // Step 7: What does your team work on?
+  {
+    agentMessages: (state) => [
+      `Nice — ${state.workspaceName} is set up.`,
+      "Now let me understand how your team works so I can turn on the right tools. What's your team's biggest day-to-day challenge?",
+    ],
+    interaction: { type: "choice", config: {
+      options: [
+        "Shipping features takes too long",
+        "Code reviews are a bottleneck",
+        "We're drowning in data requests",
+        "Incidents keep waking us up",
+      ],
+      allowCustomInput: true,
+      customInputPlaceholder: "Describe your challenge...",
+    }},
+  },
+
+  // Step 8: Acknowledge + follow-up question about team workflow
+  {
+    agentMessages: (state) => {
+      const lastUserMsg = [...state.messages].reverse().find(m => m.type === "user")
+      const answer = lastUserMsg?.content?.toLowerCase() ?? ""
+
+      let ack: string
+      if (answer.includes("ship") || answer.includes("feature")) {
+        ack = "Shipping speed is the #1 thing teams come to us for."
+      } else if (answer.includes("review") || answer.includes("bottleneck")) {
+        ack = "Slow reviews are one of the biggest hidden costs for engineering teams."
+      } else if (answer.includes("data") || answer.includes("request")) {
+        ack = "Data bottlenecks affect the whole company, not just engineering."
+      } else if (answer.includes("incident") || answer.includes("waking")) {
+        ack = "On-call burnout is real — and it's usually fixable."
+      } else {
+        ack = "Got it — that's a common pattern we see."
+      }
+
+      return [
+        ack,
+        "One more question — how does your team handle production issues today?",
+      ]
+    },
+    interaction: { type: "choice", config: {
+      options: [
+        "We have an on-call rotation",
+        "Whoever notices it fixes it",
+        "We mostly react to customer reports",
+      ],
+      allowCustomInput: true,
+      customInputPlaceholder: "Describe your process...",
+    }},
+  },
+
+  // Step 9: Smart product recommendation based on both answers
+  {
+    agentMessages: (state) => {
+      // Gather all user messages to find the strongest signal
+      const userMsgs = state.messages.filter(m => m.type === "user").map(m => m.content.toLowerCase())
+      const allText = userMsgs.join(" ")
+
+      // Score each product — pick the top 1-2
+      const scores: { product: string; score: number; desc: string }[] = [
+        {
+          product: "Code",
+          score:
+            (allText.includes("ship") ? 2 : 0) +
+            (allText.includes("feature") ? 2 : 0) +
+            (allText.includes("too long") ? 1 : 0) +
+            (allText.includes("backlog") ? 1 : 0),
+          desc: "Code — an AI engineer that writes, tests, and ships features end-to-end. Each task gets an isolated environment so you can run multiple in parallel.",
+        },
+        {
+          product: "Review",
+          score:
+            (allText.includes("review") ? 2 : 0) +
+            (allText.includes("bottleneck") ? 2 : 0) +
+            (allText.includes("pr") ? 1 : 0) +
+            (allText.includes("quality") ? 1 : 0),
+          desc: "Review — catches security issues, race conditions, and logic errors on every PR. Auto-fixes lint and minor failures. Learns your team's standards over time.",
+        },
+        {
+          product: "Data",
+          score:
+            (allText.includes("data") ? 2 : 0) +
+            (allText.includes("query") ? 2 : 0) +
+            (allText.includes("sql") ? 1 : 0) +
+            (allText.includes("drowning") ? 1 : 0),
+          desc: "Data — lets anyone query your data warehouse in plain English. No SQL needed. Creates visualizations and explains results step by step.",
+        },
+        {
+          product: "Oncall",
+          score:
+            (allText.includes("incident") ? 2 : 0) +
+            (allText.includes("waking") ? 2 : 0) +
+            (allText.includes("rotation") ? 2 : 0) +
+            (allText.includes("alert") ? 1 : 0) +
+            (allText.includes("customer report") ? 1 : 0),
+          desc: "Oncall — monitors your systems 24/7, investigates alerts automatically, and proposes fixes with real PRs. Hardens your system after every incident.",
+        },
+      ]
+
+      // Sort by score descending, pick top 1-2
+      scores.sort((a, b) => b.score - a.score)
+
+      const picks = scores[0].score > 0
+        ? scores.filter(s => s.score > 0).slice(0, 2)
+        : [scores[0]] // Default to highest if no strong signal (Code)
+
+      // If only 1, always pair Code with it (unless it IS Code)
+      if (picks.length === 1 && picks[0].product !== "Code") {
+        picks.unshift(scores.find(s => s.product === "Code")!)
+      }
+
+      const intro = `Based on what you've told me, here's where I'd start for ${state.workspaceName}:`
+      const outro = picks.length === 1
+        ? "You can add more tools anytime — but let's get this one running first."
+        : "You can always add more later, but these two will make the biggest difference right away."
+
+      return [
+        intro,
+        ...picks.map(p => p.desc),
+        outro,
+        "Let's connect your tools.",
+      ]
+    },
+  },
+
+  // Step 11: Connect GitHub account
   {
     agentMessages: [
-      "Now let's bring in your code. First, connect your GitHub account.",
+      "First, connect your GitHub account.",
     ],
     interaction: { type: "oauth-github" },
     onComplete: (state) => ({

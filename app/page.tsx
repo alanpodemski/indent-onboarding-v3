@@ -18,13 +18,13 @@ export default function OnboardingV2() {
 
   return (
     <div className="flex h-svh flex-col overflow-hidden">
-      <header className="flex shrink-0 items-center justify-between border-b border-border/30 px-6 py-3">
+      <header className="flex shrink-0 items-center justify-between px-6 py-3">
         <IndentLogo />
         <UserWidget email="user@example.com" />
       </header>
 
       <div className="flex flex-1 min-h-0">
-        <div className="w-[480px] shrink-0 border-r border-border/30">
+        <div className="w-[480px] shrink-0">
           <ChatPanel
             messages={engine.messages}
             isTyping={engine.isTyping}

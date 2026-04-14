@@ -2,14 +2,13 @@
 
 import { EASING } from "@/hooks/use-chat-engine"
 
-type NavItem = "home" | "code" | "data" | "review" | "oncall"
+type NavItem = "home" | "code" | "data" | "review"
 
 const NAV_ITEMS: { id: NavItem; label: string; color: string }[] = [
-  { id: "home", label: "Home", color: "text-foreground/50" },
-  { id: "code", label: "Code", color: "text-blue-500" },
-  { id: "data", label: "Data", color: "text-emerald-500" },
-  { id: "review", label: "Review", color: "text-amber-500" },
-  { id: "oncall", label: "Oncall", color: "text-red-500" },
+  { id: "home", label: "Home", color: "text-foreground/40" },
+  { id: "code", label: "Code", color: "text-foreground/40" },
+  { id: "data", label: "Data", color: "text-foreground/40" },
+  { id: "review", label: "Code Review", color: "text-foreground/40" },
 ]
 
 interface SessionItem {
@@ -20,15 +19,15 @@ interface SessionItem {
 
 const TODAY_SESSIONS: SessionItem[] = [
   { label: "Fix Webhook N+1", icon: "pr", iconColor: "text-blue-500" },
-  { label: "#312 Increased 500 Error...", icon: "alert", iconColor: "text-red-500" },
+  { label: "#312 Increased 500 Error...", icon: "dot", iconColor: "text-amber-500" },
 ]
 
 const WEEK_SESSIONS: SessionItem[] = [
   { label: "Database Connection Errors in...", icon: "pr", iconColor: "text-blue-500" },
-  { label: "Sudden Drop in API Response...", icon: "incident", iconColor: "text-red-500" },
+  { label: "Sudden Drop in API Response...", icon: "dot", iconColor: "text-amber-500" },
   { label: "Increased Disk I/O on Cache...", icon: "pr", iconColor: "text-blue-500" },
   { label: "Network Congestion Affecting...", icon: "dot", iconColor: "text-amber-500" },
-  { label: "Task #480 Security Vulnerability...", icon: "dot", iconColor: "text-muted-foreground/60" },
+  { label: "Task #480 Security Vulnerability...", icon: "dot", iconColor: "text-foreground/30" },
 ]
 
 export function PreviewSidebar({
@@ -174,18 +173,12 @@ function NavIcon({ name }: { name: string }) {
           <path d="M2.5 8C2.5 9.1 4.96 10 8 10C11.04 10 13.5 9.1 13.5 8" stroke="currentColor" strokeWidth="1.2"/>
         </svg>
       )
-    case "Review":
+    case "Code Review":
       return (
         <svg viewBox="0 0 16 16" fill="none" className={cls}>
           <path d="M2 4.5H14M2 8H10M2 11.5H7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
           <circle cx="13" cy="11" r="2" stroke="currentColor" strokeWidth="1.2"/>
           <path d="M12 11L12.7 11.7L14.2 10.3" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      )
-    case "Oncall":
-      return (
-        <svg viewBox="0 0 16 16" fill="none" className={cls}>
-          <path d="M8 2L9.5 5.5L13.5 6L10.75 8.5L11.5 12.5L8 10.5L4.5 12.5L5.25 8.5L2.5 6L6.5 5.5L8 2Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
         </svg>
       )
     default:

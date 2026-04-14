@@ -56,7 +56,7 @@ export function OAuthConnectButton({
       <button
         onClick={handleConnect}
         disabled={oauthState !== "idle"}
-        className="inline-flex h-11 items-center gap-2.5 rounded-xl border border-border bg-background px-5 text-[14px] font-medium text-foreground transition-all duration-300 hover:bg-foreground/[0.04] hover:border-foreground/20 active:scale-[0.98] disabled:pointer-events-none"
+        className="inline-flex h-10 cursor-pointer items-center gap-2.5 rounded-lg border border-border bg-background px-4 text-[13px] font-medium text-foreground shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 hover:bg-foreground/[0.04] hover:border-foreground/20 active:scale-[0.98] disabled:pointer-events-none"
         style={{
           ...(oauthState === "success"
             ? { borderColor: "oklch(0.50 0.17 155)", backgroundColor: "oklch(0.50 0.17 155 / 0.08)", color: "oklch(0.45 0.15 155)" }
