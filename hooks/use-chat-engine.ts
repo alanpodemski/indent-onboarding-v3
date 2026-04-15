@@ -232,7 +232,7 @@ const STEPS: StepDef[] = [
             (allText.includes("feature") ? 2 : 0) +
             (allText.includes("too long") ? 1 : 0) +
             (allText.includes("backlog") ? 1 : 0),
-          desc: "Code — an AI engineer that writes, tests, and ships features end-to-end. Each task gets an isolated environment so you can run multiple in parallel.",
+          desc: "[PRODUCT:Code] An AI engineer that writes, tests, and ships features end-to-end. Each task gets an isolated environment so you can run multiple in parallel.",
         },
         {
           product: "Review",
@@ -241,7 +241,7 @@ const STEPS: StepDef[] = [
             (allText.includes("bottleneck") ? 2 : 0) +
             (allText.includes("pr") ? 1 : 0) +
             (allText.includes("quality") ? 1 : 0),
-          desc: "Review — catches security issues, race conditions, and logic errors on every PR. Auto-fixes lint and minor failures. Learns your team's standards over time.",
+          desc: "[PRODUCT:Code Review] Catches security issues, race conditions, and logic errors on every PR. Auto-fixes lint and minor failures. Learns your standards over time.",
         },
         {
           product: "Data",
@@ -250,7 +250,7 @@ const STEPS: StepDef[] = [
             (allText.includes("query") ? 2 : 0) +
             (allText.includes("sql") ? 1 : 0) +
             (allText.includes("drowning") ? 1 : 0),
-          desc: "Data — lets anyone query your data warehouse in plain English. No SQL needed. Creates visualizations and explains results step by step.",
+          desc: "[PRODUCT:Data] Anyone on your team can query your data warehouse in plain English. Creates visualizations and explains results step by step.",
         },
         {
           product: "Oncall",
@@ -260,7 +260,7 @@ const STEPS: StepDef[] = [
             (allText.includes("rotation") ? 2 : 0) +
             (allText.includes("alert") ? 1 : 0) +
             (allText.includes("customer report") ? 1 : 0),
-          desc: "Oncall — monitors your systems 24/7, investigates alerts automatically, and proposes fixes with real PRs. Hardens your system after every incident.",
+          desc: "[PRODUCT:Oncall] Monitors your systems 24/7, investigates alerts automatically, and proposes fixes with real PRs. Hardens your system after every incident.",
         },
       ]
 

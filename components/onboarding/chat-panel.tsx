@@ -107,7 +107,9 @@ export function ChatPanel({
   const latestGroupStart = findLatestGroupStart(messages)
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="relative flex h-full flex-col">
+      {/* Top fade gradient */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-background to-transparent" />
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-8 scrollbar-none">
         <div className="flex flex-col gap-3">
           {messages.map((msg, i) => {
@@ -148,14 +150,31 @@ export function ChatPanel({
               return null
             })()
 
+            // Show "Change answer" on any user choice message (step > 5), faded or not
+            const showGoBackOutside = msg.type === "user" && (msg.step ?? 0) > 5 && !!onGoBack
+
             return (
-              <div
-                key={msg.id}
-                ref={isLatestStart ? latestRef : undefined}
-                className="transition-opacity duration-500"
-                style={{ opacity: isFaded ? 0.35 : 1 }}
-              >
-                {content}
+              <div key={msg.id} ref={isLatestStart ? latestRef : undefined}>
+                <div
+                  className="transition-opacity duration-500"
+                  style={{ opacity: isFaded ? 0.35 : 1 }}
+                >
+                  {showGoBackOutside ? <UserMessage message={msg} /> : content}
+                </div>
+                {showGoBackOutside && (
+                  <div className="flex justify-end mt-1">
+                    <button
+                      onClick={() => onGoBack(msg.step!)}
+                      className="flex items-center gap-1 text-[12px] font-medium text-blue-500/70 hover:text-blue-600 transition-colors cursor-pointer"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 6L7 2L11 6" />
+                        <path d="M7 2V10C7 12.2 8.8 14 11 14H13" />
+                      </svg>
+                      Change answer
+                    </button>
+                  </div>
+                )}
               </div>
             )
           })}
@@ -188,17 +207,25 @@ export function ChatPanel({
 function RepoConfirmButton({ onConfirm }: { onConfirm: (count: number) => void }) {
   return (
     <div
-      className="pl-10"
+      className="pl-10 flex flex-col gap-2"
       style={{ animation: `fadeInUp 400ms ${EASING.entrance} both` }}
     >
       <button
         onClick={() => onConfirm(12)}
-        className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[linear-gradient(to_bottom,rgb(64,64,64),rgb(38,38,38))] px-4 has-[kbd]:pr-2 text-[13px] font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14),inset_0_-1px_0_0_rgba(255,255,255,0.02),0_1px_2px_0_rgba(0,0,0,0.05),0_2px_4px_-1px_rgba(0,0,0,0.05)] transition-all hover:bg-[linear-gradient(to_bottom,rgb(74,74,74),rgb(48,48,48))] active:translate-y-px"
+        className="inline-flex w-fit h-10 cursor-pointer items-center gap-2 rounded-lg bg-[linear-gradient(to_bottom,rgb(64,64,64),rgb(38,38,38))] px-4 has-[kbd]:pr-2 text-[13px] font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.14),inset_0_-1px_0_0_rgba(255,255,255,0.02),0_1px_2px_0_rgba(0,0,0,0.05),0_2px_4px_-1px_rgba(0,0,0,0.05)] transition-all hover:bg-[linear-gradient(to_bottom,rgb(74,74,74),rgb(48,48,48))] active:translate-y-px"
       >
-        Confirm and Continue
+        Confirm 12 Repos
         <kbd className="flex size-6 items-center justify-center rounded-md border border-white/15 bg-white/10 text-white/70">
           <span className="text-xs font-bold leading-none">↵</span>
         </kbd>
+      </button>
+      <button
+        className="inline-flex w-fit items-center gap-1.5 cursor-pointer text-[13px] font-medium text-foreground/50 hover:text-foreground/70 transition-colors"
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8 3V13M3 8H13" />
+        </svg>
+        Add more repositories
       </button>
     </div>
   )

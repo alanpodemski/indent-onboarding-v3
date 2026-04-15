@@ -3,6 +3,7 @@
 import { AgentText, type AgentCharset } from "@/components/agent-text"
 import { AGENT_TEXT_DEFAULTS, EASING } from "@/hooks/use-chat-engine"
 import type { ChatMessage as ChatMessageType } from "@/hooks/use-chat-engine"
+import { ProductCard } from "./product-card"
 
 // ── Indent avatar (reusable) ────────────────────────────────────
 function IndentAvatar() {
@@ -33,6 +34,25 @@ export function AgentMessage({
   onComplete?: () => void
   showAvatar: boolean
 }) {
+  // Detect [PRODUCT:Name] prefix
+  const productMatch = message.content.match(/^\[PRODUCT:(.+?)\]\s*(.+)$/)
+
+  if (productMatch) {
+    const productName = productMatch[1]
+    const description = productMatch[2]
+
+    return (
+      <div className="flex gap-3 max-w-[420px]">
+        <div className="w-7 shrink-0 flex items-start pt-0.5">
+          {showAvatar && <IndentAvatar />}
+        </div>
+        <div className="flex-1 pt-0.5">
+          <ProductCard name={productName} description={description} />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex gap-3 max-w-[420px]">
       {/* Avatar column — always takes space, only renders avatar on first in group */}
@@ -82,9 +102,13 @@ export function UserMessage({
       {canGoBack && onGoBack && (
         <button
           onClick={onGoBack}
-          className="text-[11px] text-muted-foreground/40 hover:text-foreground/60 transition-colors cursor-pointer"
+          className="flex items-center gap-1 text-[12px] font-medium text-blue-500/70 hover:text-blue-600 transition-colors cursor-pointer"
         >
-          ← change
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 6L7 2L11 6" />
+            <path d="M7 2V10C7 12.2 8.8 14 11 14H13" />
+          </svg>
+          Go back
         </button>
       )}
     </div>

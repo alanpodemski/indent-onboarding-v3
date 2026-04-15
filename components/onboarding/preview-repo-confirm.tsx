@@ -27,39 +27,11 @@ export function PreviewRepoConfirm({
   githubUser: string
 }) {
   const [search, setSearch] = useState("")
-  const [extraRepos, setExtraRepos] = useState<typeof MOCK_REPOS>([])
 
-  const allRepos = [...MOCK_REPOS, ...extraRepos]
-  const filtered = allRepos.filter(r =>
+  const filtered = MOCK_REPOS.filter(r =>
     r.name.toLowerCase().includes(search.toLowerCase()) ||
     r.org.toLowerCase().includes(search.toLowerCase())
   )
-
-  const EXTRA_BATCHES = [
-    [
-      { org: "Acme", name: "payments-service", visibility: "Private" as const },
-      { org: "Acme", name: "search-indexer", visibility: "Private" as const },
-      { org: "Acme", name: "email-templates", visibility: "Private" as const },
-      { org: "Acme", name: "feature-flags", visibility: "Private" as const },
-      { org: "Acme", name: "cdn-config", visibility: "Public" as const },
-      { org: "Acme", name: "monitoring-scripts", visibility: "Private" as const },
-    ],
-    [
-      { org: "Acme", name: "ml-pipeline", visibility: "Private" as const },
-      { org: "Acme", name: "admin-panel", visibility: "Private" as const },
-      { org: "Acme", name: "rate-limiter", visibility: "Private" as const },
-      { org: "Acme", name: "webhook-relay", visibility: "Private" as const },
-      { org: "Acme", name: "deploy-scripts", visibility: "Public" as const },
-    ],
-  ]
-
-  const handleAddMore = () => {
-    const currentExtra = extraRepos.length
-    const batchIndex = currentExtra === 0 ? 0 : 1
-    if (batchIndex < EXTRA_BATCHES.length) {
-      setExtraRepos(prev => [...prev, ...EXTRA_BATCHES[batchIndex]])
-    }
-  }
 
   const initials = (githubUser || "").split(" ").map(n => n[0]).join("")
 
@@ -90,10 +62,10 @@ export function PreviewRepoConfirm({
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] text-muted-foreground/60">Wrong account?</span>
-              <button className="rounded-lg border border-border/40 px-2.5 py-1 text-[11px] font-medium text-foreground/50 hover:bg-foreground/[0.04] transition-colors">
-                Change user
-              </button>
+              <div className="h-1 w-14 rounded bg-foreground/[0.08]" />
+              <div className="rounded-lg border border-border/40 px-2.5 py-1">
+                <div className="h-1 w-12 rounded bg-foreground/[0.08]" />
+              </div>
             </div>
           </div>
 
@@ -107,12 +79,12 @@ export function PreviewRepoConfirm({
                 </svg>
                 <div>
                   <span className="text-[13px] font-semibold text-foreground/70">Repositories</span>
-                  <span className="ml-2 text-[11px] text-muted-foreground/60">{allRepos.length} repositories connected</span>
+                  <span className="ml-2 text-[11px] text-muted-foreground/60">{MOCK_REPOS.length} repositories connected</span>
                 </div>
               </div>
-              <button className="rounded-lg border border-border/40 px-3 py-1.5 text-[11px] font-medium text-foreground/50 hover:bg-foreground/[0.04] transition-colors">
-                Manage GitHub App
-              </button>
+              <div className="rounded-lg border border-border/40 px-3 py-1.5">
+                <div className="h-1 w-20 rounded bg-foreground/[0.08]" />
+              </div>
             </div>
 
             {/* Search */}
@@ -163,17 +135,9 @@ export function PreviewRepoConfirm({
               )}
             </div>
 
-            {/* Missing repos */}
-            <div className="px-4 py-3 border-t border-border/20">
-              <p className="text-[11px] text-muted-foreground/60">
-                Missing repositories?{" "}
-                <button
-                  onClick={handleAddMore}
-                  className="font-medium text-foreground/60 underline underline-offset-2 hover:text-foreground/80"
-                >
-                  Add More Repositories
-                </button>
-              </p>
+            {/* Footer spacer */}
+            <div className="px-4 py-2 border-t border-border/20">
+              <div className="h-1 w-32 rounded bg-foreground/[0.04]" />
             </div>
           </div>
         </div>
