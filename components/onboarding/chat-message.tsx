@@ -60,10 +60,18 @@ export function AgentMessage({
 }
 
 // ── User message (right-aligned pill) ───────────────────────────
-export function UserMessage({ message }: { message: ChatMessageType }) {
+export function UserMessage({
+  message,
+  canGoBack,
+  onGoBack,
+}: {
+  message: ChatMessageType
+  canGoBack?: boolean
+  onGoBack?: () => void
+}) {
   return (
     <div
-      className="flex justify-end"
+      className="flex flex-col items-end gap-1"
       style={{
         animation: `fadeInUp 400ms ${EASING.entrance} both`,
       }}
@@ -71,6 +79,14 @@ export function UserMessage({ message }: { message: ChatMessageType }) {
       <div className="rounded-xl bg-foreground/[0.06] px-4 py-2.5 text-[15px] leading-relaxed text-foreground/80">
         {message.content}
       </div>
+      {canGoBack && onGoBack && (
+        <button
+          onClick={onGoBack}
+          className="text-[11px] text-muted-foreground/40 hover:text-foreground/60 transition-colors cursor-pointer"
+        >
+          ← change
+        </button>
+      )}
     </div>
   )
 }

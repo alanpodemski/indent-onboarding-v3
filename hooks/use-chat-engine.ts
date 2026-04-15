@@ -15,6 +15,7 @@ export interface ChatMessage {
   type: MessageType
   content: string
   animating?: boolean
+  step?: number // which step produced this message
 }
 
 export interface PendingInteraction {
@@ -406,9 +407,10 @@ export function useChatEngine() {
 
   const addMessage = useCallback((type: MessageType, content: string, animating = false) => {
     const id = nextId()
+    const step = stateRef.current.step
     updateState(prev => ({
       ...prev,
-      messages: [...prev.messages, { id, type, content, animating }],
+      messages: [...prev.messages, { id, type, content, animating, step }],
     }))
     return id
   }, [nextId, updateState])
@@ -509,6 +511,37 @@ export function useChatEngine() {
     setTimeout(() => playStep(nextStep, updated), TIMING.stepPause)
   }, [updateState, playStep])
 
+  // Go back to a previous step — remove all messages from that step onward and replay
+  const goBackToStep = useCallback((targetStep: number) => {
+    // Don't allow going back to workspace creation (step 5) or earlier orientation steps
+    if (targetStep <= 5) return
+
+    // Cancel any pending timeouts
+    timeoutsRef.current.forEach(clearTimeout)
+    timeoutsRef.current = []
+
+    // Remove messages from targetStep onward
+    const filtered = stateRef.current.messages.filter(m => (m.step ?? 0) < targetStep)
+
+    // Clear played steps from targetStep onward
+    for (let i = targetStep; i < STEPS.length; i++) {
+      playedStepsRef.current.delete(i)
+    }
+
+    const updated: ChatEngineState = {
+      ...stateRef.current,
+      messages: filtered,
+      step: targetStep,
+      isTyping: false,
+      pendingInteraction: null,
+    }
+    stateRef.current = updated
+    updateState(() => updated)
+
+    // Replay from that step
+    setTimeout(() => playStep(targetStep, updated), TIMING.stepPause)
+  }, [updateState, playStep])
+
   const handleUserChoice = useCallback((value: string) => {
     addMessage("user", value)
     advanceStep(value)
@@ -552,6 +585,7 @@ export function useChatEngine() {
   return {
     ...state,
     start,
+    goBackToStep,
     handleAgentMessageComplete,
     handleUserChoice,
     handleWorkspaceName,

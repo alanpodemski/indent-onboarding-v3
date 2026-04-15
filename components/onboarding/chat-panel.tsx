@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useCallback } from "react"
 import { AgentMessage, UserMessage, SystemMessage, TypingIndicator } from "./chat-message"
 import { ChoiceButtons } from "./choice-buttons"
 import { WorkspaceInput } from "./workspace-input"
@@ -10,6 +10,30 @@ import { SlackConnectCard } from "./slack-connect-card"
 import { LaunchButton } from "./launch-button"
 import { EASING } from "@/hooks/use-chat-engine"
 import type { ChatMessage, PendingInteraction } from "@/hooks/use-chat-engine"
+
+// Find the index where the "latest group" starts
+// Latest group = the last run of agent messages (possibly preceded by the user message that triggered them)
+function findLatestGroupStart(messages: ChatMessage[]): number {
+  if (messages.length === 0) return 0
+
+  // Walk backwards to find the start of the last agent message run
+  let i = messages.length - 1
+
+  // If last message is user/system, that's the start
+  if (messages[i].type !== "agent") return i
+
+  // Walk back through consecutive agent messages
+  while (i > 0 && messages[i - 1].type === "agent") {
+    i--
+  }
+
+  // Include the user message right before the agent group (it triggered this response)
+  if (i > 0 && messages[i - 1].type === "user") {
+    i--
+  }
+
+  return i
+}
 
 export function ChatPanel({
   messages,
@@ -25,6 +49,7 @@ export function ChatPanel({
   onSlackConnect,
   onSlackSkip,
   onLaunch,
+  onGoBack,
 }: {
   messages: ChatMessage[]
   isTyping: boolean
@@ -39,12 +64,32 @@ export function ChatPanel({
   onSlackConnect: () => void
   onSlackSkip: () => void
   onLaunch: () => void
+  onGoBack?: (step: number) => void
 }) {
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const latestRef = useRef<HTMLDivElement>(null)
+
+  // Scroll so the latest group sits at ~40% from top
+  const scrollToCenter = useCallback(() => {
+    const container = scrollRef.current
+    const target = latestRef.current
+    if (!container || !target) return
+
+    const containerHeight = container.clientHeight
+    const targetTop = target.offsetTop
+    const desiredScroll = targetTop - containerHeight * 0.35
+
+    container.scrollTo({
+      top: Math.max(0, desiredScroll),
+      behavior: "smooth",
+    })
+  }, [])
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
-  }, [messages.length, isTyping, pendingInteraction])
+    // Small delay to let new messages render
+    const t = setTimeout(scrollToCenter, 100)
+    return () => clearTimeout(t)
+  }, [messages.length, isTyping, pendingInteraction, scrollToCenter])
 
   const isFirstInAgentGroup = (index: number): boolean => {
     const msg = messages[index]
@@ -59,33 +104,60 @@ export function ChatPanel({
     messages[messages.length - 1].type !== "agent"
   )
 
+  const latestGroupStart = findLatestGroupStart(messages)
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-y-auto px-6 py-8 scrollbar-none">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-8 scrollbar-none">
         <div className="flex flex-col gap-3">
           {messages.map((msg, i) => {
             const prevMsg = messages[i - 1]
             const isConsecutiveAgent = msg.type === "agent" && prevMsg?.type === "agent"
+            const isFaded = i < latestGroupStart
 
-            if (msg.type === "agent") {
-              return (
-                <div key={msg.id} style={isConsecutiveAgent ? { marginTop: -4 } : undefined}>
-                  <AgentMessage
+            // Mark the start of the latest group for scroll targeting
+            const isLatestStart = i === latestGroupStart
+
+            const content = (() => {
+              if (msg.type === "agent") {
+                return (
+                  <div style={isConsecutiveAgent ? { marginTop: -4 } : undefined}>
+                    <AgentMessage
+                      message={msg}
+                      showAvatar={isFirstInAgentGroup(i)}
+                      onComplete={() => onAgentMessageComplete(msg.id)}
+                    />
+                  </div>
+                )
+              }
+              if (msg.type === "user") {
+                // Allow going back on choice steps (step > 5, not workspace creation)
+                const msgStep = msg.step ?? 0
+                const canGoBack = isFaded && msgStep > 5 && !!onGoBack
+                return (
+                  <UserMessage
                     message={msg}
-                    showAvatar={isFirstInAgentGroup(i)}
-                    onComplete={() => onAgentMessageComplete(msg.id)}
+                    canGoBack={canGoBack}
+                    onGoBack={canGoBack ? () => onGoBack(msgStep) : undefined}
                   />
-                </div>
-              )
-            }
-            if (msg.type === "user") {
-              return <UserMessage key={msg.id} message={msg} />
-            }
-            if (msg.type === "system") {
-              return <SystemMessage key={msg.id} message={msg} />
-            }
-            return null
+                )
+              }
+              if (msg.type === "system") {
+                return <SystemMessage message={msg} />
+              }
+              return null
+            })()
+
+            return (
+              <div
+                key={msg.id}
+                ref={isLatestStart ? latestRef : undefined}
+                className="transition-opacity duration-500"
+                style={{ opacity: isFaded ? 0.35 : 1 }}
+              >
+                {content}
+              </div>
+            )
           })}
 
           {isTyping && <TypingIndicator showAvatar={typingShowsAvatar} />}
@@ -105,7 +177,8 @@ export function ChatPanel({
             />
           )}
 
-          <div ref={bottomRef} />
+          {/* Spacer so latest content stays centered, not stuck at bottom */}
+          <div style={{ minHeight: "40vh" }} />
         </div>
       </div>
     </div>

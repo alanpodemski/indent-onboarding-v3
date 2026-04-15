@@ -17,7 +17,6 @@ export default function OnboardingV2() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Delay the layout shift so the answer animates first
   useEffect(() => {
     if (engine.step >= 2 && !expanded) {
       const t = setTimeout(() => setExpanded(true), 600)
@@ -26,59 +25,64 @@ export default function OnboardingV2() {
   }, [engine.step, expanded])
 
   return (
-    <div className="flex h-svh flex-col overflow-hidden">
-      <header className="flex shrink-0 items-center justify-between px-6 py-3">
-        <IndentLogo />
-        <UserWidget email="user@example.com" />
-      </header>
+    <div className="flex h-svh flex-col items-center overflow-hidden">
+      {/* Everything in one centered container */}
+      <div className="flex w-full max-w-[1280px] flex-col flex-1 min-h-0">
+        <header className="flex shrink-0 items-center justify-between px-6 py-3">
+          <IndentLogo />
+          <UserWidget email="user@example.com" />
+        </header>
 
-      <div className="relative flex-1 min-h-0 overflow-hidden">
-        {/* Chat panel */}
-        <div
-          className="absolute top-0 bottom-0 z-10 will-change-[left,right]"
-          style={{
-            left: expanded ? "0" : "50%",
-            width: "480px",
-            transform: expanded ? "none" : "translateX(-50%)",
-            transition: "left 1600ms cubic-bezier(0.16, 1, 0.3, 1), transform 1600ms cubic-bezier(0.16, 1, 0.3, 1)",
-          }}
-        >
-          <ChatPanel
-            messages={engine.messages}
-            isTyping={engine.isTyping}
-            pendingInteraction={engine.pendingInteraction}
-            githubUser={engine.githubUser}
-            onAgentMessageComplete={engine.handleAgentMessageComplete}
-            onUserChoice={engine.handleUserChoice}
-            onWorkspaceName={engine.handleWorkspaceName}
-            onOAuthSuccess={engine.handleOAuthSuccess}
-            onGitHubInstall={engine.handleGitHubInstall}
-            onRepoConfirm={engine.handleRepoConfirm}
-            onSlackConnect={engine.handleSlackConnect}
-            onSlackSkip={engine.handleSlackSkip}
-            onLaunch={engine.handleLaunch}
-          />
-        </div>
+        {/* Content area — vertically centered */}
+        <div className="flex flex-1 min-h-0 items-center">
+          <div className="flex w-full min-h-0" style={{ maxHeight: "min(85vh, 800px)" }}>
+            {/* Chat panel */}
+            <div
+              className="shrink-0 will-change-[width,margin]"
+              style={{
+                width: "480px",
+                marginLeft: expanded ? "0" : "calc(50% - 240px)",
+                transition: "margin-left 1600ms cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+            >
+              <ChatPanel
+                messages={engine.messages}
+                isTyping={engine.isTyping}
+                pendingInteraction={engine.pendingInteraction}
+                githubUser={engine.githubUser}
+                onAgentMessageComplete={engine.handleAgentMessageComplete}
+                onUserChoice={engine.handleUserChoice}
+                onWorkspaceName={engine.handleWorkspaceName}
+                onOAuthSuccess={engine.handleOAuthSuccess}
+                onGitHubInstall={engine.handleGitHubInstall}
+                onRepoConfirm={engine.handleRepoConfirm}
+                onSlackConnect={engine.handleSlackConnect}
+                onSlackSkip={engine.handleSlackSkip}
+                onLaunch={engine.handleLaunch}
+                onGoBack={engine.goBackToStep}
+              />
+            </div>
 
-        {/* Preview panel */}
-        <div
-          className="absolute top-0 right-0 bottom-0 p-4 will-change-[opacity,transform]"
-          style={{
-            left: "480px",
-            opacity: expanded ? 1 : 0,
-            transform: expanded ? "translateX(0)" : "translateX(60px)",
-            transition: "opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1) 600ms, transform 1600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms",
-            pointerEvents: expanded ? "auto" : "none",
-            visibility: expanded ? "visible" : "hidden",
-          }}
-        >
-          <div className="h-full">
-            <PreviewPanel
-              previewState={engine.previewState}
-              workspaceName={engine.workspaceName}
-              pendingInteraction={engine.pendingInteraction}
-              githubUser={engine.githubUser}
-            />
+            {/* Preview panel */}
+            <div
+              className="flex flex-1 items-start justify-center p-4 pt-0 will-change-[opacity,transform]"
+              style={{
+                opacity: expanded ? 1 : 0,
+                transform: expanded ? "translateX(0)" : "translateX(60px)",
+                transition: "opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1) 600ms, transform 1600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms",
+                pointerEvents: expanded ? "auto" : "none",
+                visibility: expanded ? "visible" : "hidden",
+              }}
+            >
+              <div className="h-full max-h-[720px] w-full max-w-[700px]">
+                <PreviewPanel
+                  previewState={engine.previewState}
+                  workspaceName={engine.workspaceName}
+                  pendingInteraction={engine.pendingInteraction}
+                  githubUser={engine.githubUser}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
